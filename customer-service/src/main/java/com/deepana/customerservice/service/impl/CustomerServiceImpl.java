@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
@@ -47,6 +48,15 @@ public class CustomerServiceImpl implements CustomerService {
                 .stream()
                 .map(this::mapToResponse)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Map<Long, CustomerResponse> getCustomersByIds(List<Long> ids) {
+        return customerRepository.findAllById(ids)
+                .stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toMap(CustomerResponse::getId, response -> response));
     }
 
     @Override

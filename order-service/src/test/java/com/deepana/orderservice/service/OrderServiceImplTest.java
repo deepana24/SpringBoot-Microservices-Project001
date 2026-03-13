@@ -16,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -89,7 +90,7 @@ class OrderServiceImplTest {
     @Test
     void getAllOrders_Success() {
         when(orderRepository.findAll()).thenReturn(List.of(order));
-        when(customerFeignClient.getCustomerById(1L)).thenReturn(customerResponse);
+        when(customerFeignClient.getCustomersByIds(List.of(1L))).thenReturn(Map.of(1L, customerResponse));
 
         List<OrderResponse> responses = orderService.getAllOrders();
 

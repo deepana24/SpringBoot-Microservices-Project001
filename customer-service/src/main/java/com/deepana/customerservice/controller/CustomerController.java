@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/customers")
@@ -35,6 +36,12 @@ public class CustomerController {
     @GetMapping
     public ResponseEntity<List<CustomerResponse>> getAllCustomers() {
         List<CustomerResponse> customers = customerService.getAllCustomers();
+        return ResponseEntity.ok(customers);
+    }
+
+    @GetMapping("/batch")
+    public ResponseEntity<Map<Long, CustomerResponse>> getCustomersByIds(@RequestParam List<Long> ids) {
+        Map<Long, CustomerResponse> customers = customerService.getCustomersByIds(ids);
         return ResponseEntity.ok(customers);
     }
 

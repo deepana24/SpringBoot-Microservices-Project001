@@ -4,6 +4,7 @@ import com.deepana.customerservice.dto.CustomerRequest;
 import com.deepana.customerservice.dto.CustomerResponse;
 
 import java.util.List;
+import java.util.Map;
 
 public interface CustomerService {
 
@@ -12,6 +13,8 @@ public interface CustomerService {
     CustomerResponse getCustomerById(Long id);
 
     List<CustomerResponse> getAllCustomers();
+
+    Map<Long, CustomerResponse> getCustomersByIds(List<Long> ids);
 
     CustomerResponse updateCustomer(Long id, CustomerRequest customerRequest);
 

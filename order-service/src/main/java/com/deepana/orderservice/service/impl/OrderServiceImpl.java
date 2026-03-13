@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
@@ -54,12 +55,17 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional(readOnly = true)
     public List<OrderResponse> getAllOrders() {
-        return orderRepository.findAll()
-                .stream()
-                .map(order -> {
-                    CustomerResponse customer = customerFeignClient.getCustomerById(order.getCustomerId());
-                    return mapToResponse(order, customer);
-                })
+        List<Order> orders = orderRepository.findAll();
+        if (orders.isEmpty()) {
+            return List.of();
+        }
+        List<Long> customerIds = orders.stream()
+                .map(Order::getCustomerId)
+                .distinct()
+                .collect(Collectors.toList());
+        Map<Long, CustomerResponse> customersById = customerFeignClient.getCustomersByIds(customerIds);
+        return orders.stream()
+                .map(order -> mapToResponse(order, customersById.get(order.getCustomerId())))
                 .collect(Collectors.toList());
     }
 
