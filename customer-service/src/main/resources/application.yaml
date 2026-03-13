@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: customer-service
+  config:
+    import: optional:configserver:http://localhost:8888
+  profiles:
+    active: dev
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh
